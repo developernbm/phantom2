@@ -1,0 +1,73 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Runtime config (user-specific)
+config.json
+.env
+.env.local
+
+# Build outputs
+build/
+builds/
+store/
+exports/
+dist/
+out/
+
+# Android build artifacts
+android/.gradle/
+android/build/
+android/app/build/
+android/dropper/build/
+android/local.properties
+android/build_ip.txt
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+
+# Keystores (never commit — user generates their own)
+tools/*.jks
+tools/*.keystore
+*.keystore
+*.jks
+
+# Certificates
+certs/
+*.crt
+*.p12
+*.pem
+
+# Data
+data/
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Logs
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Specs (dev-only)
+specs/
+
+# Gradle caches
+.gradle/
+.gradletaskhistory
+.gradlebuildoutputcleanup

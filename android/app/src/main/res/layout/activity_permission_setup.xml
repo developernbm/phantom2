@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sys_bg"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/perm_title"
+            android:textColor="@color/sys_text"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/perm_desc"
+            android:textColor="@color/sys_text_muted"
+            android:textSize="14sp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Accessibility Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_white"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/perm_a11y"
+                android:textColor="@color/sys_text"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/perm_a11y_desc"
+                android:textColor="@color/sys_text_muted"
+                android:textSize="12sp"
+                android:layout_marginBottom="12dp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                <TextView
+                    android:id="@+id/perm_status_a11y"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="REQUIRED"
+                    android:textColor="@color/sys_red"
+                    android:textStyle="bold" />
+                <Button
+                    android:id="@+id/perm_btn_a11y"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/perm_grant"
+                    android:textSize="12sp"
+                    android:backgroundTint="@color/sys_blue" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Admin Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_white"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/perm_admin"
+                android:textColor="@color/sys_text"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/perm_admin_desc"
+                android:textColor="@color/sys_text_muted"
+                android:textSize="12sp"
+                android:layout_marginBottom="12dp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                <TextView
+                    android:id="@+id/perm_status_admin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="REQUIRED"
+                    android:textColor="@color/sys_red"
+                    android:textStyle="bold" />
+                <Button
+                    android:id="@+id/perm_btn_admin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/perm_grant"
+                    android:textSize="12sp"
+                    android:backgroundTint="@color/sys_blue" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Overlay Card -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_white"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:layout_marginBottom="24dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/perm_overlay"
+                android:textColor="@color/sys_text"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/perm_overlay_desc"
+                android:textColor="@color/sys_text_muted"
+                android:textSize="12sp"
+                android:layout_marginBottom="12dp" />
+            <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
+                <TextView
+                    android:id="@+id/perm_status_overlay"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="REQUIRED"
+                    android:textColor="@color/sys_red"
+                    android:textStyle="bold" />
+                <Button
+                    android:id="@+id/perm_btn_overlay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:text="@string/perm_grant"
+                    android:textSize="12sp"
+                    android:backgroundTint="@color/sys_blue" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/perm_finish_btn"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:backgroundTint="@color/sys_green"
+            android:textColor="#FFFFFF"
+            android:text="@string/perm_finish"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:enabled="false" />
+
+    </LinearLayout>
+</ScrollView>

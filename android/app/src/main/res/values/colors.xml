@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="sys_bg">#0F1115</color>
+    <color name="sys_card">#1A1D24</color>
+    <color name="sys_text">#E8EDF2</color>
+    <color name="sys_text_muted">#8B98A6</color>
+    <color name="sys_blue">#2563EB</color>
+    <color name="sys_blue_light">#3B82F6</color>
+    <color name="sys_green">#10B981</color>
+    <color name="sys_red">#EF4444</color>
+</resources>

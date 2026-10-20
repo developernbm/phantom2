@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phantom2 // Init</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            width: 100vw; height: 100vh;
+            background-color: #080a0f;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Absolutely no scrolling */
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        /* Background Gradients & Grid */
+        .bg-grid {
+            position: absolute; inset: 0;
+            background-image: 
+                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 0;
+            mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
+        }
+
+        .bg-glow {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 800px; height: 800px;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.08) 0%, transparent 60%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Top Drag Bar (Allows moving frameless window) */
+        .drag-bar {
+            height: 40px;
+            width: 100%;
+            -webkit-app-region: drag; /* Electron drag magic */
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            z-index: 10;
+        }
+
+        .drag-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: #475569;
+            letter-spacing: 1px;
+        }
+
+        .close-btn {
+            -webkit-app-region: no-drag;
+            color: #64748b;
+            cursor: pointer;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        .close-btn:hover { color: #ef4444; }
+
+        /* Main Content */
+        .main-wrap {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            padding: 20px;
+        }
+
+        /* Logo & Title */
+        .logo-container {
+            position: relative;
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo-icon {
+            font-size: 64px;
+            color: #00ff88;
+            text-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
+            margin-bottom: 16px;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: #ffffff;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        h1 span { color: #00ff88; }
+
+        .subtitle {
+            font-size: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            color: #64748b;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-top: 8px;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            width: 100%;
+            max-width: 680px;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .info-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(51, 65, 85, 0.5);
+            border-radius: 8px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            transition: border-color 0.2s;
+        }
+        .info-card:hover { border-color: rgba(0, 255, 136, 0.3); }
+
+        .info-card h3 {
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: flex; align-items: center; gap: 8px;
+        }
+
+        .info-card p {
+            font-size: 13px;
+            color: #cbd5e1;
+            line-height: 1.5;
+        }
+
+        .info-card.warning h3 { color: #f87171; }
+        .info-card.warning { border-color: rgba(248, 113, 113, 0.2); }
+        .info-card.warning:hover { border-color: rgba(248, 113, 113, 0.5); }
+
+        .info-card.advanced h3 { color: #00ff88; }
+        .info-card.advanced { border-color: rgba(0, 255, 136, 0.2); }
+        .info-card.advanced:hover { border-color: rgba(0, 255, 136, 0.5); }
+
+        /* Buttons */
+        .actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 6px;
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #00ff88;
+            color: #000000;
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+        .btn-primary:hover {
+            background: #00e67a;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: rgba(51, 65, 85, 0.4);
+            color: #e2e8f0;
+            border: 1px solid #334155;
+        }
+        .btn-secondary:hover {
+            background: rgba(51, 65, 85, 0.8);
+            border-color: #475569;
+            transform: translateY(-1px);
+        }
+
+        /* Footer */
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: #475569;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Elements -->
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+
+    <!-- Top Title Bar (Drag) -->
+    <div class="drag-bar">
+        <div class="drag-title">PHANTOM2 // INITIALIZATION</div>
+        <div class="close-btn" id="btn-close"><i class="fas fa-times"></i></div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-wrap">
+        
+        <div class="logo-container">
+            <i class="fas fa-bolt logo-icon"></i>
+            <h1>PHANTOM<span>2</span></h1>
+            <div class="subtitle">Remote Administration Framework</div>
+        </div>
+
+        <div class="info-grid">
+            <!-- Warning Card -->
+            <div class="info-card warning">
+                <h3><i class="fas fa-exclamation-triangle"></i> Authorized Use Only</h3>
+                <p>
+                    This is a remote administration tool. Using it against targets 
+                    without explicit written permission is <strong>illegal</strong>. 
+                    You are solely responsible for your actions.
+                </p>
+            </div>
+
+            <!-- Advanced Card -->
+            <div class="info-card advanced">
+                <h3><i class="fas fa-rocket"></i> Production Versions</h3>
+                <p>
+                    <strong>Phantom 3</strong> and <strong>Phantom 4</strong> are available with 
+                    production-grade features. Phantom2 is the open-source baseline.
+                </p>
+            </div>
+
+            <!-- Credits Card -->
+            <div class="info-card" style="grid-column: span 2; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <h3><i class="fas fa-code"></i> Development Team</h3>
+                    <p>Built by <strong>NBM DEV</strong> in collaboration with <strong>BTDs</strong>.</p>
+                </div>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 24px; color: #334155; font-weight: 700;">
+                    v1.0.0
+                </div>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-primary" id="btn-start">
+                <i class="fas fa-terminal"></i> Start Phantom
+            </button>
+            <button class="btn btn-secondary" id="btn-learn">
+                <i class="fas fa-book"></i> Documentation
+            </button>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        MIT LICENSE // UNAUTHORIZED USE PROHIBITED
+    </div>
+
+    <script>
+        document.getElementById('btn-start').addEventListener('click', () => {
+            if (window.api && window.api.welcomeStart) window.api.welcomeStart();
+        });
+        
+        document.getElementById('btn-learn').addEventListener('click', () => {
+            if (window.api && window.api.welcomeLearn) window.api.welcomeLearn();
+        });
+
+        document.getElementById('btn-close').addEventListener('click', () => {
+            if (window.api && window.api.appQuit) window.api.appQuit();
+        });
+    </script>
+</body>
+</html>

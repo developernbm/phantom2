@@ -1,0 +1,37 @@
+{
+  "_comment": "Copy this file to config.json and fill in your own values. config.json is gitignored.",
+
+  "c2Host": "127.0.0.1",
+  "c2Port": 8080,
+
+  "dropperPort": 8090,
+  "dropperToken": "0000000000000000",
+
+  "aiApiKey": "",
+
+  "android": {
+    "sdkPath": "C:\\android-sdk",
+    "buildToolsVersion": "34.0.0",
+    "minSdk": 26,
+    "targetSdk": 34,
+    "compileSdk": 34,
+    "applicationId": "com.systemupdate.app",
+    "appName": "System Update",
+    "versionCode": 1,
+    "versionName": "1.0"
+  },
+
+  "signing": {
+    "keystorePath": "tools/keystore.jks",
+    "keystorePass": "",
+    "keystoreAlias": "phantom",
+    "keyPass": ""
+  },
+
+  "panel": {
+    "theme": "dark",
+    "autoLoadDevices": true,
+    "enableAiAnalysis": true,
+    "enableRansomwareTab": true
+  }
+}

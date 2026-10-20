@@ -1,0 +1,55 @@
+{
+  "name": "phantom2",
+  "version": "1.0.0",
+  "description": "Phantom2 — open-source Android remote administration framework",
+  "main": "main.js",
+  "author": "THE LEGUE",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nbmll/phantom2.git"
+  },
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "dependencies": {
+    "crypto-js": "^4.2.0",
+    "express": "^5.2.1",
+    "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "electron": "^28.1.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.phantom2.panel",
+    "productName": "Phantom2",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer.js",
+      "index.html",
+      "styles.css",
+      "phantom.js",
+      "ai_analysis.js",
+      "groq.js",
+      "repack.js",
+      "randomize_build.js",
+      "assets/**",
+      "docs/**"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "linux": {
+      "target": "AppImage"
+    },
+    "mac": {
+      "target": "dmg"
+    }
+  }
+}
