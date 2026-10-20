@@ -1,3 +1,4 @@
+ HEAD
 # Phantom2
 
 **Open-source Android remote administration framework.**
@@ -93,3 +94,6 @@ Everything is MIT licensed. Everything is source-available.
 ```bash
 git clone https://github.com/nbmll/phantom2.git
 cd phantom2
+
+# PHANTOM2
+ 2a3b2a8b57da9c3d02c6cf2ac1cf11ef51d6bef1
