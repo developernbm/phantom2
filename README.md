@@ -2,7 +2,7 @@
 # Phantom2
 
 **Open-source Android remote administration framework.**
-**Built by NBM DEV, in collaboration with BTDs.**
+**NBM.**
 
 Phantom2 is a complete C2 suite for authorized Android security testing — a
 cross-platform Electron control panel paired with a lightweight Android
@@ -15,7 +15,7 @@ anyone can clone, build, and extend.
 
 ---
 
-## ⚠️ Authorized Use Only
+## FOR EDUCATIONAL AND AUTHORIZED USE ONLY
 
 Phantom2 is a remote administration tool. Using it against devices you do
 not own, or lack explicit permission to test, is **illegal** in most
@@ -49,10 +49,9 @@ Everything is MIT licensed. Everything is source-available.
 - **Keylogger** — live keystroke stream
 - **Notifications** — live notification capture
 - **Apps Manager** — installed apps, open/kill actions
-- **Data** — SMS, contacts, calls, clipboard, keylogs
-- **APK Builder** — build the client APK from source with your C2 baked in
-- **Dropper Server** — optional HTTP server for APK sideloading
-- **System Logs** — accessibility, devices, commands, errors
+- **Data** —
+- **APK Builder** 
+- **System Logs**
 
 ---
 
