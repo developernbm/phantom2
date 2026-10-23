@@ -92,7 +92,7 @@ Everything is MIT licensed. Everything is source-available.
 ### 1. Clone
 
 ```bash
-git clone https://github.com/nbmll/phantom2.git
+git clone https://github.com/developernbm/phantom2.git
 cd phantom2
 
 # PHANTOM2
