@@ -1,304 +1,713 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Phantom2 // Init</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PHANTOM2</title>
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            width: 100vw; height: 100vh;
-            background-color: #080a0f;
-            color: #e2e8f0;
-            font-family: 'Inter', sans-serif;
-            overflow: hidden; /* Absolutely no scrolling */
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
+<style>
+:root {
+  --red: #ff183d;
+  --deep-red: #8c001d;
+  --muted: #a78c95;
+  --bg: #050306;
+}
 
-        /* Background Gradients & Grid */
-        .bg-grid {
-            position: absolute; inset: 0;
-            background-image: 
-                linear-gradient(rgba(0, 255, 136, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(0, 255, 136, 0.03) 1px, transparent 1px);
-            background-size: 40px 40px;
-            z-index: 0;
-            mask-image: radial-gradient(circle at center, black 40%, transparent 80%);
-        }
+* { box-sizing: border-box; }
 
-        .bg-glow {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            width: 800px; height: 800px;
-            background: radial-gradient(circle, rgba(0, 255, 136, 0.08) 0%, transparent 60%);
-            z-index: 0;
-            pointer-events: none;
-        }
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
 
-        /* Top Drag Bar (Allows moving frameless window) */
-        .drag-bar {
-            height: 40px;
-            width: 100%;
-            -webkit-app-region: drag; /* Electron drag magic */
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
-            z-index: 10;
-        }
+body {
+  overflow: hidden;
+  color: white;
+  background:
+    radial-gradient(ellipse at 75% 48%, #240711 0%, transparent 48%),
+    var(--bg);
+  font-family: "Segoe UI", Arial, sans-serif;
+}
 
-        .drag-title {
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 11px;
-            color: #475569;
-            letter-spacing: 1px;
-        }
+#space {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  display: block;
+}
 
-        .close-btn {
-            -webkit-app-region: no-drag;
-            color: #64748b;
-            cursor: pointer;
-            font-size: 14px;
-            transition: color 0.2s;
-        }
-        .close-btn:hover { color: #ef4444; }
+.background-grid {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: .12;
+  background-image:
+    linear-gradient(rgba(255,24,61,.2) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,24,61,.2) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(to bottom, black, transparent 90%);
+}
 
-        /* Main Content */
-        .main-wrap {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            padding: 20px;
-        }
+.topbar, .footer {
+  position: fixed;
+  z-index: 3;
+  left: 5%;
+  right: 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  color: #a78c95;
+  font-size: 10px;
+  letter-spacing: 2px;
+}
 
-        /* Logo & Title */
-        .logo-container {
-            position: relative;
-            margin-bottom: 24px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+.topbar { top: 24px; }
+.footer { bottom: 23px; color: #75505c; font-size: 9px; }
 
-        .logo-icon {
-            font-size: 64px;
-            color: #00ff88;
-            text-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
-            margin-bottom: 16px;
-            animation: float 4s ease-in-out infinite;
-        }
+.status {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
+.dot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 12px var(--red);
+  animation: blink 1s steps(2) infinite;
+}
 
-        h1 {
-            font-size: 48px;
-            font-weight: 800;
-            letter-spacing: -1px;
-            color: #ffffff;
-            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
-        h1 span { color: #00ff88; }
+.red { color: var(--red); }
 
-        .subtitle {
-            font-size: 12px;
-            font-family: 'JetBrains Mono', monospace;
-            color: #64748b;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-top: 8px;
-        }
+/* Typing elements retain the original layout. */
+.type-text {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
 
-        /* Info Grid */
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 16px;
-            width: 100%;
-            max-width: 680px;
-            margin-top: 40px;
-            margin-bottom: 40px;
-        }
+main {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  width: min(600px, 53vw);
+  min-height: 100vh;
+  margin-left: 8%;
+  padding: 90px 0 85px;
+}
 
-        .info-card {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(51, 65, 85, 0.5);
-            border-radius: 8px;
-            padding: 20px;
-            backdrop-filter: blur(10px);
-            transition: border-color 0.2s;
-        }
-        .info-card:hover { border-color: rgba(0, 255, 136, 0.3); }
+.eyebrow {
+  margin-bottom: 24px;
+  color: var(--red);
+  font-size: 10px;
+  letter-spacing: 4px;
+}
 
-        .info-card h3 {
-            font-size: 11px;
-            font-family: 'JetBrains Mono', monospace;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-            display: flex; align-items: center; gap: 8px;
-        }
+h1 {
+  position: relative;
+  margin: 0;
+  font-size: clamp(54px, 7.4vw, 104px);
+  line-height: 1.08;
+  letter-spacing: -.055em;
+  font-weight: 950;
+  white-space: nowrap;
+  text-transform: uppercase;
+  color: #ff274a;
+  background: linear-gradient(
+    180deg,
+    #fff0f3 0%,
+    #ff6b82 16%,
+    #ff183d 43%,
+    #c0002c 68%,
+    #510013 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter:
+    drop-shadow(0 2px 0 #92001d)
+    drop-shadow(0 5px 0 #500010)
+    drop-shadow(0 12px 18px rgba(255,0,45,.32));
+  transform: perspective(600px) rotateX(8deg);
+  transform-origin: bottom;
+  animation: titleIn .9s ease-out both;
+}
 
-        .info-card p {
-            font-size: 13px;
-            color: #cbd5e1;
-            line-height: 1.5;
-        }
+.rule {
+  width: 88px;
+  height: 3px;
+  flex-shrink: 0;
+  margin: 22px 0;
+  background: var(--red);
+  box-shadow: 0 0 16px rgba(255,24,61,.7);
+}
 
-        .info-card.warning h3 { color: #f87171; }
-        .info-card.warning { border-color: rgba(248, 113, 113, 0.2); }
-        .info-card.warning:hover { border-color: rgba(248, 113, 113, 0.5); }
+.typing-area {
+  width: 100%;
+  min-height: 112px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: #ff4562;
+  font-size: clamp(11px, 1.15vw, 14px);
+  line-height: 1.65;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+}
 
-        .info-card.advanced h3 { color: #00ff88; }
-        .info-card.advanced { border-color: rgba(0, 255, 136, 0.2); }
-        .info-card.advanced:hover { border-color: rgba(0, 255, 136, 0.5); }
+.type-line {
+  display: block;
+  min-height: 23px;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(-16px);
+  transition: opacity .35s ease, transform .35s ease;
+}
 
-        /* Buttons */
-        .actions {
-            display: flex;
-            gap: 16px;
-        }
+.type-line.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
 
-        .btn {
-            padding: 14px 32px;
-            border-radius: 6px;
-            font-family: 'Inter', sans-serif;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border: none;
-        }
+.cursor {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  margin-left: 3px;
+  vertical-align: -2px;
+  background: var(--red);
+  box-shadow: 0 0 10px var(--red);
+  animation: blink .7s steps(2) infinite;
+}
 
-        .btn-primary {
-            background: #00ff88;
-            color: #000000;
-            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
-        }
-        .btn-primary:hover {
-            background: #00e67a;
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
-            transform: translateY(-1px);
-        }
+.description {
+  max-width: 420px;
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.9;
+  letter-spacing: .5px;
+}
 
-        .btn-secondary {
-            background: rgba(51, 65, 85, 0.4);
-            color: #e2e8f0;
-            border: 1px solid #334155;
-        }
-        .btn-secondary:hover {
-            background: rgba(51, 65, 85, 0.8);
-            border-color: #475569;
-            transform: translateY(-1px);
-        }
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 17px;
+  margin-top: 28px;
+}
 
-        /* Footer */
-        .footer {
-            position: absolute;
-            bottom: 20px;
-            width: 100%;
-            text-align: center;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 10px;
-            color: #475569;
-            z-index: 10;
-        }
-    </style>
+.btn {
+  position: relative;
+  min-height: 49px;
+  padding: 14px 19px;
+  border: 1px solid #ff536d;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #ff3657, #bd002b 65%, #710019);
+  color: white;
+  font: 800 10px "Segoe UI", Arial, sans-serif;
+  letter-spacing: 1.4px;
+  cursor: pointer;
+  transform: perspective(500px) rotateX(5deg);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.35),
+    inset 0 -3px 0 rgba(0,0,0,.28),
+    0 5px 0 #510012,
+    0 10px 20px rgba(255,0,45,.17);
+  transition: transform .18s, box-shadow .18s, filter .18s;
+}
+
+.btn.secondary {
+  color: #ff748a;
+  background: linear-gradient(180deg, #291019, #10070c);
+  border-color: #762137;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 5px 0 #30000b,
+    0 10px 20px rgba(0,0,0,.3);
+}
+
+.btn:hover {
+  transform: perspective(500px) rotateX(0) translateY(-3px);
+  filter: brightness(1.15);
+  box-shadow: 0 8px 0 #510012, 0 15px 25px rgba(255,0,45,.22);
+}
+
+.btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 #510012;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@keyframes titleIn {
+  from {
+    opacity: 0;
+    transform: perspective(600px) rotateX(-35deg) translateY(-25px);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(600px) rotateX(8deg) translateY(0);
+  }
+}
+
+@media (max-width: 800px) {
+  main {
+    width: 86%;
+    margin-left: 7%;
+    padding-top: 85px;
+    padding-bottom: 80px;
+  }
+
+  #space { opacity: .62; }
+
+  h1 {
+    font-size: clamp(48px, 12vw, 82px);
+    letter-spacing: -.06em;
+  }
+
+  .typing-area { font-size: 11px; }
+  .topbar, .footer { font-size: 8px; letter-spacing: 1px; }
+}
+
+@media (max-height: 650px) {
+  main {
+    padding-top: 65px;
+    padding-bottom: 55px;
+  }
+
+  .eyebrow { margin-bottom: 12px; }
+  .rule { margin: 13px 0; }
+  .typing-area { min-height: 88px; gap: 4px; }
+  .description { margin-top: 8px; }
+  .actions { margin-top: 15px; }
+  .btn { min-height: 42px; padding: 11px 15px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+</style>
 </head>
+
 <body>
-    <!-- Background Elements -->
-    <div class="bg-grid"></div>
-    <div class="bg-glow"></div>
+<canvas id="space"></canvas>
+<div class="background-grid"></div>
 
-    <!-- Top Title Bar (Drag) -->
-    <div class="drag-bar">
-        <div class="drag-title">PHANTOM2 // INITIALIZATION</div>
-        <div class="close-btn" id="btn-close"><i class="fas fa-times"></i></div>
-    </div>
+<header class="topbar">
+  <div class="status">
+    <span class="dot"></span>
+    <span class="type-text" id="brandText"></span>
+  </div>
+  <div class="type-text" id="coreText"></div>
+</header>
 
-    <!-- Main Content -->
-    <div class="main-wrap">
-        
-        <div class="logo-container">
-            <i class="fas fa-bolt logo-icon"></i>
-            <h1>PHANTOM<span>2</span></h1>
-            <div class="subtitle">Remote Administration Framework</div>
-        </div>
+<main>
+  <div class="eyebrow type-text" id="eyebrowText"></div>
 
-        <div class="info-grid">
-            <!-- Warning Card -->
-            <div class="info-card warning">
-                <h3><i class="fas fa-exclamation-triangle"></i> Authorized Use Only</h3>
-                <p>
-                    This is a remote administration tool. Using it against targets 
-                    without explicit written permission is <strong>illegal</strong>. 
-                    You are solely responsible for your actions.
-                </p>
-            </div>
+  <h1 id="titleText"></h1>
 
-            <!-- Advanced Card -->
-            <div class="info-card advanced">
-                <h3><i class="fas fa-rocket"></i> Production Versions</h3>
-                <p>
-                    <strong>Phantom 3</strong> and <strong>Phantom 4</strong> are available with 
-                    production-grade features. Phantom2 is the open-source baseline.
-                </p>
-            </div>
+  <div class="rule"></div>
 
-            <!-- Credits Card -->
-            <div class="info-card" style="grid-column: span 2; display: flex; justify-content: space-between; align-items: center;">
-                <div>
-                    <h3><i class="fas fa-code"></i> Development Team</h3>
-                    <p>Built by <strong>NBM DEV</strong> in collaboration with <strong>BTDs</strong>.</p>
-                </div>
-                <div style="font-family: 'JetBrains Mono', monospace; font-size: 24px; color: #334155; font-weight: 700;">
-                    v1.0.0
-                </div>
-            </div>
-        </div>
+  <section class="typing-area" aria-live="polite">
+    <div class="type-line" id="line1"></div>
+    <div class="type-line" id="line2"></div>
+    <div class="type-line" id="line3"></div>
+  </section>
 
-        <div class="actions">
-            <button class="btn btn-primary" id="btn-start">
-                <i class="fas fa-terminal"></i> Start Phantom
-            </button>
-            <button class="btn btn-secondary" id="btn-learn">
-                <i class="fas fa-book"></i> Documentation
-            </button>
-        </div>
+  <p class="description type-text" id="descriptionText"></p>
 
-    </div>
+  <div class="actions">
+    <button class="btn" id="startBtn" type="button">
+      &#9654; &nbsp; ENTER PHANTOM2
+    </button>
 
-    <div class="footer">
-        MIT LICENSE // UNAUTHORIZED USE PROHIBITED
-    </div>
+    <button class="btn secondary" id="docsBtn" type="button">
+      &#8599; &nbsp; DOCUMENTATION
+    </button>
+  </div>
+</main>
 
-    <script>
-        document.getElementById('btn-start').addEventListener('click', () => {
-            if (window.api && window.api.welcomeStart) window.api.welcomeStart();
-        });
-        
-        document.getElementById('btn-learn').addEventListener('click', () => {
-            if (window.api && window.api.welcomeLearn) window.api.welcomeLearn();
-        });
+<footer class="footer">
+  <div>
+    <span class="type-text" id="footerBrand"></span>
+    <span class="red"> /// </span>
+    <span class="type-text" id="footerLabel"></span>
+  </div>
+  <div>
+    <span class="type-text" id="footerBuild"></span>
+    <span class="red"> /// </span>
+    <span class="type-text" id="footerReady"></span>
+  </div>
+</footer>
 
-        document.getElementById('btn-close').addEventListener('click', () => {
-            if (window.api && window.api.appQuit) window.api.appQuit();
-        });
-    </script>
+<script>
+/*
+ * One global queue types every requested text element.
+ * Adjust LETTER_DELAY to change the speed.
+ */
+const LETTER_DELAY = 95;
+const SPACE_DELAY = 150;
+const LINE_DELAY = 320;
+
+const typingSequence = [
+  { id: "brandText", text: "PHANTOM SYSTEMS" },
+  { id: "coreText", text: "CORE INTERFACE // V2.0" },
+  { id: "eyebrowText", text: "SYSTEM INITIALIZATION / 001" },
+  { id: "titleText", text: "PHANTOM2" },
+  { id: "line1", text: "REMOTE ADMINISTRATION FRAMEWORK" },
+  { id: "line2", text: "SYSTEM INTERFACE ONLINE" },
+  { id: "line3", text: "AUTHORIZED ENVIRONMENTS ONLY" },
+  {
+    id: "descriptionText",
+    text: "A precision-built digital environment. Explore the interface and access technical resources."
+  },
+  { id: "footerBrand", text: "PHANTOM2" },
+  { id: "footerLabel", text: "DIGITAL INTERFACE" },
+  { id: "footerBuild", text: "BUILD 02.0" },
+  { id: "footerReady", text: "READY" }
+];
+
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+async function typeElement(item) {
+  const element = document.getElementById(item.id);
+  if (!element) return;
+
+  element.classList.add("visible");
+
+  const cursor = document.createElement("span");
+  cursor.className = "cursor";
+  element.appendChild(cursor);
+
+  for (const character of item.text) {
+    cursor.before(document.createTextNode(character));
+
+    const delay = character === " "
+      ? SPACE_DELAY
+      : LETTER_DELAY;
+
+    await wait(delay);
+  }
+
+  cursor.remove();
+  await wait(LINE_DELAY);
+}
+
+async function runAllTyping() {
+  for (const item of typingSequence) {
+    await typeElement(item);
+  }
+}
+
+runAllTyping();
+
+/* Existing Electron navigation methods remain unchanged. */
+document.getElementById("startBtn").addEventListener("click", () => {
+  if (typeof window.api?.welcomeStart === "function") {
+    window.api.welcomeStart();
+  } else {
+    console.warn("Connect welcomeStart() to your existing application navigation.");
+  }
+});
+
+document.getElementById("docsBtn").addEventListener("click", () => {
+  if (typeof window.api?.welcomeLearn === "function") {
+    window.api.welcomeLearn();
+  } else {
+    console.warn("Connect welcomeLearn() to your existing documentation page.");
+  }
+});
+</script>
+
+<script type="module">
+import * as THREE from
+  "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
+
+const canvas = document.getElementById("space");
+
+let renderer;
+
+try {
+  renderer = new THREE.WebGLRenderer({
+    canvas,
+    antialias: true,
+    alpha: true
+  });
+} catch (error) {
+  console.error("WebGL initialization failed:", error);
+}
+
+if (renderer) {
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+  const scene = new THREE.Scene();
+
+  const camera = new THREE.PerspectiveCamera(
+    38,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    100
+  );
+
+  camera.position.z = 10;
+
+  scene.add(new THREE.AmbientLight(0xffffff, 1.25));
+
+  const redLight = new THREE.PointLight(0xff183d, 35, 30);
+  redLight.position.set(3, 2, 5);
+  scene.add(redLight);
+
+  const sunLight = new THREE.DirectionalLight(0xffffff, 3);
+  sunLight.position.set(-4, 5, 8);
+  scene.add(sunLight);
+
+  const system = new THREE.Group();
+  scene.add(system);
+
+  const textureLoader = new THREE.TextureLoader();
+  textureLoader.setCrossOrigin("anonymous");
+
+  function makeSphere({
+    radius,
+    position,
+    texture,
+    color = 0xffffff,
+    roughness = 1
+  }) {
+    const geometry = new THREE.SphereGeometry(radius, 96, 64);
+
+    const material = new THREE.MeshStandardMaterial({
+      color,
+      map: texture || null,
+      roughness,
+      metalness: 0
+    });
+
+    const sphere = new THREE.Mesh(geometry, material);
+    sphere.position.set(...position);
+    system.add(sphere);
+
+    return sphere;
+  }
+
+  function loadTexture(url) {
+    return textureLoader.load(
+      url,
+      texture => {
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      },
+      undefined,
+      error => console.error("Planet texture failed to load:", url, error)
+    );
+  }
+
+  const earthMap = loadTexture(
+    "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg"
+  );
+
+  const earthClouds = loadTexture(
+    "https://threejs.org/examples/textures/planets/earth_clouds_1024.png"
+  );
+
+  const moonMap = loadTexture(
+    "https://threejs.org/examples/textures/planets/moon_1024.jpg"
+  );
+
+  const marsMap = loadTexture(
+    "https://threejs.org/examples/textures/planets/mars_1k_color.jpg"
+  );
+
+  const earth = makeSphere({
+    radius: 2.05,
+    position: [2.65, 0.05, 0],
+    texture: earthMap
+  });
+
+  earth.rotation.z = THREE.MathUtils.degToRad(23.4);
+
+  const atmosphere = new THREE.Mesh(
+    new THREE.SphereGeometry(2.12, 96, 64),
+    new THREE.MeshBasicMaterial({
+      color: 0xff173d,
+      transparent: true,
+      opacity: 0.12,
+      side: THREE.BackSide
+    })
+  );
+
+  atmosphere.position.copy(earth.position);
+  system.add(atmosphere);
+
+  const clouds = new THREE.Mesh(
+    new THREE.SphereGeometry(2.075, 96, 64),
+    new THREE.MeshStandardMaterial({
+      map: earthClouds,
+      transparent: true,
+      opacity: 0.22,
+      depthWrite: false
+    })
+  );
+
+  clouds.position.copy(earth.position);
+  system.add(clouds);
+
+  const moon = makeSphere({
+    radius: 0.43,
+    position: [-1.05, 1.45, 0.4],
+    texture: moonMap
+  });
+
+  const mars = makeSphere({
+    radius: 0.57,
+    position: [4.9, -2.0, -0.5],
+    texture: marsMap
+  });
+
+  const saturn = makeSphere({
+    radius: 0.46,
+    position: [5.2, 2.25, -1.2],
+    color: 0xc89c70
+  });
+
+  const saturnRing = new THREE.Mesh(
+    new THREE.RingGeometry(0.62, 1.02, 96),
+    new THREE.MeshStandardMaterial({
+      color: 0xd5a477,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.8,
+      roughness: 1
+    })
+  );
+
+  saturnRing.position.copy(saturn.position);
+  saturnRing.rotation.x = Math.PI / 2.7;
+  saturnRing.rotation.y = 0.2;
+  system.add(saturnRing);
+
+  function makeOrbit(radiusX, radiusY, rotation, opacity) {
+    const points = [];
+
+    for (let i = 0; i <= 240; i++) {
+      const angle = (i / 240) * Math.PI * 2;
+
+      points.push(new THREE.Vector3(
+        Math.cos(angle) * radiusX,
+        Math.sin(angle) * radiusY,
+        -0.7
+      ));
+    }
+
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+
+    const line = new THREE.LineLoop(
+      geometry,
+      new THREE.LineBasicMaterial({
+        color: 0xff2347,
+        transparent: true,
+        opacity
+      })
+    );
+
+    line.position.set(2.4, 0, -0.5);
+    line.rotation.z = rotation;
+    system.add(line);
+  }
+
+  makeOrbit(3.05, 1.65, -0.38, 0.36);
+  makeOrbit(3.55, 2.15, 0.45, 0.2);
+  makeOrbit(2.9, 2.45, 1.0, 0.14);
+
+  const starCount = 1100;
+  const starPositions = new Float32Array(starCount * 3);
+
+  for (let i = 0; i < starCount; i++) {
+    starPositions[i * 3] = (Math.random() - 0.5) * 24;
+    starPositions[i * 3 + 1] = (Math.random() - 0.5) * 14;
+    starPositions[i * 3 + 2] = -2 - Math.random() * 12;
+  }
+
+  const starGeometry = new THREE.BufferGeometry();
+
+  starGeometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(starPositions, 3)
+  );
+
+  const stars = new THREE.Points(
+    starGeometry,
+    new THREE.PointsMaterial({
+      color: 0xff8da2,
+      size: 0.018,
+      transparent: true,
+      opacity: 0.8
+    })
+  );
+
+  scene.add(stars);
+
+  function resize() {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    renderer.setSize(width, height);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+
+    if (width < 800) {
+      system.scale.setScalar(0.72);
+      system.position.x = 0.6;
+    } else {
+      system.scale.setScalar(1);
+      system.position.x = 0;
+    }
+  }
+
+  window.addEventListener("resize", resize);
+  resize();
+
+  const clock = new THREE.Clock();
+
+  function animate() {
+    requestAnimationFrame(animate);
+
+    const time = clock.getElapsedTime();
+
+    earth.rotation.y += 0.0017;
+    clouds.rotation.y += 0.0019;
+    moon.rotation.y += 0.001;
+    mars.rotation.y += 0.0015;
+    saturn.rotation.y += 0.001;
+    saturnRing.rotation.z += 0.0006;
+
+    system.position.y = Math.sin(time * 0.35) * 0.06;
+    stars.rotation.z = Math.sin(time * 0.03) * 0.012;
+
+    renderer.render(scene, camera);
+  }
+
+  animate();
+}
+</script>
 </body>
 </html>
