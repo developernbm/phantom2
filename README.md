@@ -1,21 +1,21 @@
  HEAD
-# Phantom2
+# PHANTOM II
 
 **Open-source Android remote administration framework.**
-**Built by NBM DEV, in collaboration with BTDs.**
+**NBM.**
 
 Phantom2 is a complete C2 suite for authorized Android security testing — a
 cross-platform Electron control panel paired with a lightweight Android
 client. Use it for red-team engagements, lab research, and testing on devices
 you own.
 
-Phantom 3 and Phantom 4 are available with production-grade features and
+PHANTOM v3 , v4 and v5 are available with production-grade features and
 advanced capabilities. Phantom2 is the public, MIT-licensed baseline that
 anyone can clone, build, and extend.
 
 ---
 
-## ⚠️ Authorized Use Only
+## FOR EDUCATIONAL AND AUTHORIZED USE ONLY
 
 Phantom2 is a remote administration tool. Using it against devices you do
 not own, or lack explicit permission to test, is **illegal** in most
@@ -36,23 +36,22 @@ Everything is MIT licensed. Everything is source-available.
 
 ---
 
-## Panel features
+## PANEL FEATURES
 
-- **Dashboard** — live stats, connected device count, activity feed
-- **Devices** — card + list views, per-device status, a11y + admin state, battery, carrier, country
-- **HVNC & Control** — live screen frames, UI tree overlay, hitboxes, tap, type, swipe, key codes, navigation
-- **Ransomware Lock** — timed device lock with fake encryption animation (no payment screen)
-- **AI Analysis** — Kimi/Moonshot-powered forensic reports over harvested data, streaming Markdown output
-- **Location** — live coordinates, accuracy, Google Maps embed
-- **Camera** — front + back live JPEG stream
-- **Files** — browse, list, pull files from the device
-- **Keylogger** — live keystroke stream
-- **Notifications** — live notification capture
-- **Apps Manager** — installed apps, open/kill actions
-- **Data** — SMS, contacts, calls, clipboard, keylogs
-- **APK Builder** — build the client APK from source with your C2 baked in
-- **Dropper Server** — optional HTTP server for APK sideloading
-- **System Logs** — accessibility, devices, commands, errors
+- **Dashboard** 
+- **Devices** 
+- **HVNC & Control** 
+- **Ransomware Lock** 
+- **AI Analysis** 
+- **Location** 
+- **Camera** 
+- **Files** 
+- **Keylogger** 
+- **Notifications** 
+- **Apps Manager** 
+- **Data** 
+- **APK Builder** 
+- **System Logs**
 
 ---
 
@@ -82,18 +81,22 @@ Everything is MIT licensed. Everything is source-available.
 
 **Client build:**
 - JDK 17
-- Android SDK 34 (build-tools 34.0.0)
+- Android SDK 34 (build-tools 34.0.0 https://developer.android.com/studio
 - Android device running 8.0 (API 26) or higher
 
 ---
 
 ## Quick Start
+  **env**
+  - READ  [.env.example](.env.example)
 
 ### 1. Clone
 
 ```bash
 git clone https://github.com/developernbm/phantom2.git
 cd phantom2
+npm install
+npm start
 
 # PHANTOM2
  2a3b2a8b57da9c3d02c6cf2ac1cf11ef51d6bef1
