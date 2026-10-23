@@ -82,7 +82,7 @@ Everything is MIT licensed. Everything is source-available.
 
 **Client build:**
 - JDK 17
-- Android SDK 34 (build-tools 34.0.0)
+- Android SDK 34 (build-tools 34.0.0 https://developer.android.com/studio
 - Android device running 8.0 (API 26) or higher
 
 ---
@@ -94,6 +94,8 @@ Everything is MIT licensed. Everything is source-available.
 ```bash
 git clone https://github.com/developernbm/phantom2.git
 cd phantom2
+npm install
+npm start
 
 # PHANTOM2
  2a3b2a8b57da9c3d02c6cf2ac1cf11ef51d6bef1
