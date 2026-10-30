@@ -14,6 +14,20 @@ if (ipFile.exists()) {
     }
 }
 
+// FIX: the build runs from builds/build_<id>/android/, so the real project
+// root (where tools/ lives) is THREE levels up, not one.
+//   builds/build_<id>/android/  ->  ../../..  ->  phantom2/
+def releaseKeystore = rootProject.file("../../../tools/keystore.jks")
+
+// Fail loudly if the keystore is missing. Silent skipping is what produced
+// an unsigned APK and the confusing "Signed APK not found" message.
+if (!releaseKeystore.exists()) {
+    throw new GradleException(
+        "Release keystore not found at ${releaseKeystore.absolutePath}. " +
+        "Expected it at <projectRoot>/tools/keystore.jks."
+    )
+}
+
 android {
     namespace 'com.systemupdate.app'
     compileSdk 34
@@ -32,7 +46,7 @@ android {
 
     signingConfigs {
         release {
-            storeFile file('C:/Users/HP/phantom2/tools/keystore.jks')
+            storeFile releaseKeystore
             storePassword 'phantom123'
             keyAlias 'phantom'
             keyPassword 'phantom123'
@@ -45,6 +59,8 @@ android {
 
     buildTypes {
         release {
+            // Keystore existence is now guaranteed by the check above,
+            // so attach it unconditionally.
             signingConfig signingConfigs.release
             minifyEnabled false
             shrinkResources false
